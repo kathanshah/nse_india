@@ -1,0 +1,10 @@
+SELECT pclose, close, ((close - pclose)/pclose)*100, sum( ((close - pclose)/pclose)*100) trend, dt from sh_symbol_data where sid = 593 and dt between '2018-04-01' and '2018-05-09' ORDER BY dt DESC
+
+SELECT symbol, pclose, close, sum(((close - pclose)/pclose)*100) trend, dt from sh_symbol_data d JOIN sh_symbols s on d.sid = s.id where d.dt between '2018-05-01' AND '2018-05-26' GROUP BY s.id ORDER BY trend DESC
+
+SELECT symbol, sum(((close - pclose)/pclose)*100) trend, sum(tqty) tqty, sum(tval) tval
+from sh_symbol_data d 
+JOIN sh_symbols s on d.sid = s.id 
+where d.dt BETWEEN DATE_SUB(now(), INTERVAL 1 MONTH) AND now()
+GROUP BY s.id 
+ORDER BY trend DESC
