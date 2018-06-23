@@ -17,12 +17,20 @@ class Nseapi extends CI_Model {
         return $response;
     }
 
-    function getTrending(){
-        $result = $this->db->query("SELECT symbol, sum(((close - pclose)/pclose)*100) trend, sum(tqty) tqty, sum(tval) tval
+    function getTrending($input){
+
+        /*  SELECT symbol, sum(((close - pclose)/pclose)*100) trend, tqty, tval
             from sh_symbol_data d 
             JOIN sh_symbols s on d.sid = s.id 
             where d.dt BETWEEN DATE_SUB(now(), INTERVAL 1 MONTH) AND now()
             GROUP BY s.id 
+            ORDER BY trend DESC */
+        
+        $result = $this->db->query("SELECT symbol, sum(((close - pclose)/pclose)*100) trend, tqty, tval, sid, open, high, low, close, pclose
+            from sh_symbol_data d 
+            JOIN sh_symbols s on d.sid = s.id 
+            where d.dt BETWEEN '".$input['from']."' AND '".$input['to']."'
+            GROUP BY s.id
             ORDER BY trend DESC")->result_array();
 
         return $result;

@@ -1,0 +1,36 @@
+#loader{
+    position: fixed;
+    z-index:99999;
+    background-color:rgba(0,0,0,0.4);
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+}
+#loader img{
+    position: fixed;
+    top:50%;
+    left:50%;
+    margin-top:-100px;
+    margin-left:-100px;
+}
+body{
+    background-color:#faffff8c;
+    font-family: 'Lato', sans-serif;
+}
+[v-cloak] {
+    display: none;
+}
+.table{
+    background-color:#fff;
+}
+.uptrend-icon, .downtrend-icon{
+    vertical-align:middle;
+    font-size:1.5rem;
+}
+.uptrend-icon{
+    color:#28a745;
+}
+.downtrend-icon{
+    color:#dc3545;
+}

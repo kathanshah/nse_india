@@ -7,14 +7,14 @@ import datetime
 
 # print datetime.datetime.now() - datetime.timedelta(days=5*365)
 
-for i in range(0, 17):
+for i in range(0, 10):
     try:
         day = datetime.datetime.now() - datetime.timedelta(days=i)
         day = day.date()
         stringDay = day.isoformat()+""
         # print(stringDay)
         prices = nsepy.history.get_price_list(dt=day)
-        prices.to_csv('data/'+stringDay+'.csv', sep=',')
+        prices.to_csv('utils/data/'+stringDay+'.csv', sep=',')
     except:
         print("Failed for : "+stringDay)
 
@@ -23,6 +23,6 @@ for i in range(0, 17):
 # print data
 # data[['Close']].plot()
 
-prices = nsepy.history.get_price_list(dt=datetime.date(2013,5,10))
+# prices = nsepy.history.get_price_list(dt=datetime.date(2013,5,10))
 # print prices
-prices.to_csv("data/2013-05-10.csv", sep=',')
+# prices.to_csv("data/2013-05-10.csv", sep=',')
