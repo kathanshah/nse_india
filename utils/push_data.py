@@ -1,17 +1,23 @@
+import pymysql
+import paramiko
+import pandas as pd
+from paramiko import SSHClient
+from sshtunnel import SSHTunnelForwarder
+from os.path import expanduser
 import nsepy
 import csv
 import os
-import mysql.connector
 import datetime
 
 directory = "utils/data/"
-
-db = mysql.connector.connect(
-    host="localhost",    # your host, usually localhost
-    user="root",         # your username
-    passwd="root",  # your password
-    db="nse_india"
-)
+sql_hostname = '127.0.0.1'
+sql_username = 'nse_india'
+sql_password = 'nse_india'
+sql_main_database = 'nse_india'
+sql_port = 3306
+ssh_host = 'cat-apps.com'
+ssh_user = 'qukocsfx0e4u'
+ssh_port = 22
 
 def putData(row,iid):
     cursor = db.cursor()
@@ -86,12 +92,23 @@ def getBhavCopy(lastUpdatedDate):
                 print("Failed for : "+stringDay)
     publishPending(lastUpdatedDate)
     
-
-cursor = db.cursor()
-cursor.execute("select max(dt) dt from sh_symbol_data")
-data = cursor.fetchone()
-if data[0] == None:
-    print("publish all")
-    # publishAll()
-else:
-    getBhavCopy(data[0])
+    
+with SSHTunnelForwarder(
+        (ssh_host, ssh_port),
+        ssh_username=ssh_user,
+        ssh_password='}4IL}UrZ#G',
+        remote_bind_address=(sql_hostname, sql_port)) as tunnel:
+    db = pymysql.connect(host='127.0.0.1', user=sql_username,
+        passwd=sql_password, db=sql_main_database,
+        port=tunnel.local_bind_port)
+    queryMaxDate = 'select max(dt) dt from sh_symbol_data'
+    # data = pd.read_sql_query(query, conn)
+    cursor = db.cursor()
+    cursor.execute("select max(dt) dt from sh_symbol_data")
+    data = cursor.fetchone()
+    print("LAST UPDATED DATE WAS : "+str(data[0]))
+    # if data[0] == None:
+    #     print("publish all")
+    #     # publishAll()
+    # else:
+    #     getBhavCopy(data[0])
